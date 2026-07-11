@@ -1,0 +1,37 @@
+{
+  "name": "smashrun-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for retrieving a user's running data from Smashrun",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "smashrun-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "smashrun",
+    "running",
+    "model-context-protocol"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
