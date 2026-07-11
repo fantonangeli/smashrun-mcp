@@ -17,6 +17,14 @@
     "prepublishOnly": "npm run build"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elbonian/smashrun-mcp.git"
+  },
+  "homepage": "https://github.com/elbonian/smashrun-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/elbonian/smashrun-mcp/issues"
+  },
   "engines": {
     "node": ">=18"
   },
