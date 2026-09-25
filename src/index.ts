@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { serveHttp } from "./http.js";
 import { z } from "zod";
 
 const BASE_URL = "https://api.smashrun.com/v1";
@@ -73,10 +74,11 @@ async function run(fn: () => Promise<unknown>) {
   }
 }
 
-const server = new McpServer({
-  name: "smashrun",
-  version: "1.0.0",
-});
+function createSmashrunServer() {
+  const server = new McpServer({
+    name: "smashrun",
+    version: "1.0.0",
+  });
 
 server.registerTool(
   "get_user_info",
@@ -292,12 +294,27 @@ server.registerTool(
     run(() => smashrunGet(latestOnly ? "/my/body/weight/latest" : "/my/body/weight"))
 );
 
+  return server;
+}
+
 async function main() {
   if (!process.env.SMASHRUN_ACCESS_TOKEN) {
     console.error(
       "[smashrun-mcp] Warning: SMASHRUN_ACCESS_TOKEN is not set; tool calls will fail until it is provided."
     );
   }
+  const transportArg = process.argv.indexOf("--transport");
+  const transportName = transportArg >= 0 ? process.argv[transportArg + 1] : "stdio";
+
+  if (transportName === "http") {
+    serveHttp(createSmashrunServer);
+    return;
+  }
+  if (transportName !== "stdio") {
+    throw new Error(`Unsupported transport: ${transportName}`);
+  }
+
+  const server = createSmashrunServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("[smashrun-mcp] Smashrun MCP server running on stdio");

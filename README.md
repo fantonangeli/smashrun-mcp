@@ -56,6 +56,16 @@ Example config (Windsurf: `~/.codeium/windsurf/mcp_config.json`, Claude Desktop:
 
 Restart your MCP client fully after editing the config.
 
+### Streamable HTTP
+
+`stdio` remains the default. To run the server over Streamable HTTP instead:
+
+```sh
+npm start -- --transport http
+```
+
+The MCP endpoint is `http://127.0.0.1:3000/mcp`. Set `MCP_HOST` and `MCP_PORT` to change the bind address or port.
+
 <details>
 <summary>Running from source instead</summary>
 
@@ -96,4 +106,4 @@ npm run dev   # tsc --watch
 npm start     # run the built server
 ```
 
-The server communicates over stdio and reads the `SMASHRUN_ACCESS_TOKEN` environment variable.
+The server uses `stdio` by default, with optional Streamable HTTP support, and reads the `SMASHRUN_ACCESS_TOKEN` environment variable.
