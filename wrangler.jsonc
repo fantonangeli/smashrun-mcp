@@ -1,9 +1,20 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "smashrun-mcp",
-  "main": "src/worker.ts",
-  "compatibility_date": "2026-09-28",
-  "secrets": {
-    "required": ["SMASHRUN_ACCESS_TOKEN"]
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "smashrun-mcp",
+	"main": "src/worker.ts",
+	"compatibility_date": "2026-09-28",
+	"secrets": {
+		"required": [
+            "GITHUB_CLIENT_ID",
+            "ALLOWED_GITHUB_USER_ID",
+			"GITHUB_CLIENT_SECRET",
+			"SMASHRUN_ACCESS_TOKEN"
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "OAUTH_KV",
+			"id": "ad526886eac5418c94edb79f3728d003"
+		}
+	]
 }
