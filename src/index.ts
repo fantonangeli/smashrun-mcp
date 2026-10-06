@@ -3,8 +3,10 @@ import { z } from "zod";
 
 const BASE_URL = "https://api.smashrun.com/v1";
 
-function getToken(): string {
-  const token = process.env.SMASHRUN_ACCESS_TOKEN;
+function getToken(accessToken?: string): string {
+  const token =
+    accessToken ??
+    (typeof process !== "undefined" ? process.env.SMASHRUN_ACCESS_TOKEN : undefined);
   if (!token) {
     throw new Error(
       'SMASHRUN_ACCESS_TOKEN environment variable is not set. ' +
@@ -15,9 +17,10 @@ function getToken(): string {
   return token;
 }
 
-async function smashrunGet(
+async function smashrunRequest(
   path: string,
-  params?: Record<string, string | number | undefined>
+  params?: Record<string, string | number | undefined>,
+  accessToken?: string
 ): Promise<unknown> {
   const url = new URL(`${BASE_URL}${path}`);
   if (params) {
@@ -29,7 +32,7 @@ async function smashrunGet(
   }
   const res = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken(accessToken)}`,
       Accept: "application/json",
     },
   });
@@ -71,11 +74,16 @@ async function run(fn: () => Promise<unknown>) {
   }
 }
 
-export function createSmashrunServer() {
+export function createSmashrunServer(accessToken?: string) {
   const server = new McpServer({
     name: "smashrun",
     version: "1.0.0",
   });
+
+  const smashrunGet = (
+    path: string,
+    params?: Record<string, string | number | undefined>
+  ) => smashrunRequest(path, params, accessToken);
 
 server.registerTool(
   "get_user_info",
